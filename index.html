@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Untitled Document</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+<!-- for konashijs -->
+<script src="http://konashi.ux-xu.com/kjs/konashi-bridge.min.js"></script>
+
+<!-- zepto -->
+<script src="http://jsrun.it/assets/1/M/0/f/1M0fl"></script>
+<!-- touch.js -->
+<script src="http://jsrun.it/assets/g/s/1/M/gs1MI"></script>
+<!-- ratchet -->
+<link rel="stylesheet" href="http://jsrun.it/assets/h/F/P/P/hFPPa">
+<script src="http://jsrun.it/assets/g/3/W/u/g3WuF"></script>
+
+<script>
+    // forked from oyu's "誰でもできるKoshianでLチカ（PIO5のみ）" http://jsdo.it/oyu/cqZj
+    // forked from p.esrd.demo's "Konashi_LED_ON_OFF" http://jsdo.it/p.esrd.demo/ledtest
+    // forked from habingo's "KoshianでLEDチカチカ" http://jsdo.it/habingo/1pT8
+    // forked from monakaz's "まずはLチカ（LEDチカチカ）" http://jsdo.it/monakaz/nOMl
+    // konashi.js LEDチカチカkoshianでトライ
+    // LEDチカチカ開始
+    var interval = 500;
+    var timer1;
+    
+    function startBlinkLed(){
+        var toggle = false;
+        
+       timer1 = setInterval(function(){
+        if(toggle){
+            // LEDをON/OFF
+               k.digitalWrite(k.PIO0, k.HIGH);
+            } else {
+                // LEDをOFF/ON
+               k.digitalWrite(k.PIO0, k.LOW);
+            }
+            
+            // 次の状態をセット
+            toggle = !toggle;
+          }, interval);
+      
+        $("#goran").html("接続中。koshian on the konashi");
+    }
+    
+    // koshianと接続できたら
+    k.ready(function(){
+        // まずはI/Oの設定から
+        k.pinModeAll(254);
+        //k.pinMode(k.PIO5, k.OUTPUT);
+        
+        // Lチカスタートさせるよ
+        startBlinkLed();
+});
+    
+    //ボタン処理
+    $(function(){
+        $("#find").on("tap", function(){
+            k.find();
+            console.log("koshian is ready");  
+        });
+        $("#fast").on("tap", function(){
+            //interval = 50;
+            interval = 10;
+            clearInterval(timer1);
+            //すばやく Lチカ
+            startBlinkLed();
+        });
+        $("#slow").on("tap", function(){
+            interval = 1000;
+            clearInterval(timer1);
+            // ゆっくりLチカ
+            startBlinkLed();
+        });
+        $("#disconnect").on("tap", function(){
+            //接続を切ります
+            clearInterval(timer1);
+            k.disconnect();
+        });
+        $("#stop").on("tap", function(){
+            clearInterval(timer1);
+            k.digitalWrite(k.PIO0, k.LOW);
+    
+        });
+    });
+    
+    k.disconnected(function(){
+        $("#goran").html("切断。");        
+    });
+
+</script>
+
+</head>
+
+<body>
+    <header class="bar-title">
+        <h1 class="title">koshian: LED ON/OFF</h1>
+    </header>
+    <div class="content">
+        <div class="element">
+            koshian LED ON/OFF
+        </div>
+        <a id="find" class="button-main button-block element">
+            koshian 接続開始
+        </a>
+        <a id="fast" class="button-main button-block element">
+            高速
+        </a>
+        <a id="slow" class="button-main button-block element">
+            低速
+        </a>
+        <a id="stop" class="button-main button-block element">
+            停止
+        </a>
+        <a id="disconnect" class="button-main button-block element">
+            koshian 接続解除
+        </a>
+        <div id="goran" class="element"></div>
+    </div>
+</body>
+</html>
