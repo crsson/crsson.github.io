@@ -68,7 +68,7 @@
         });
         $("#fast").on("tap", function(){
             //interval = 50;
-            interval = 10;
+            interval = 0;
             clearInterval(timer1);
             //すばやく Lチカ
             startBlinkLed();
@@ -89,7 +89,19 @@
             k.digitalWrite(k.PIO0, k.LOW);
     
         });
-    });
+
+        $("#motor").on("tap", function(){
+
+        if(k.PIO5==k.HIGH){
+            // モーターをON/OFF
+               k.digitalWrite(k.PIO5, k.LOW);
+            } else {
+                // モーターをOFF/ON
+               k.digitalWrite(k.PIO5, k.HIGH);
+            }
+
+        });
+	});
     
     k.disconnected(function(){
         $("#goran").html("切断。");        
@@ -102,7 +114,7 @@
 <body>
     <header class="bar-title">
         <h1 class="title">koshian: LED ON/OFF</h1>
-    </header>
+</header>
     <div class="content">
         <div class="element">
             koshian LED ON/OFF
@@ -118,6 +130,9 @@
         </a>
         <a id="stop" class="button-main button-block element">
             停止
+        </a>
+        <a id="motor" class="button-main button-block element">
+            モーター
         </a>
         <a id="disconnect" class="button-main button-block element">
             koshian 接続解除
