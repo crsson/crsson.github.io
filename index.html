@@ -54,7 +54,6 @@
     k.ready(function(){
         // まずはI/Oの設定から
         k.pinModeAll(254);
-        //k.pinMode(k.PIO5, k.OUTPUT);
         
         // Lチカスタートさせるよ
         startBlinkLed();
@@ -66,42 +65,26 @@
             k.find();
             console.log("koshian is ready");  
         });
-        $("#fast").on("tap", function(){
-            //interval = 50;
-            interval = 0;
-            clearInterval(timer1);
-            //すばやく Lチカ
-            startBlinkLed();
-        });
-        $("#slow").on("tap", function(){
-            interval = 1000;
-            clearInterval(timer1);
-            // ゆっくりLチカ
-            startBlinkLed();
-        });
         $("#disconnect").on("tap", function(){
             //接続を切ります
             clearInterval(timer1);
             k.disconnect();
         });
-        $("#stop").on("tap", function(){
-            clearInterval(timer1);
-            k.digitalWrite(k.PIO0, k.LOW);
-    
+
+        $("#LEDON").on("tap", function(){
+        	k.digitalWrite(k.PIO0, k.HIGH);
+        });
+        $("#LEDOFF").on("tap", function(){
+        	k.digitalWrite(k.PIO0, k.LOW);
         });
 
-        $("#motor").on("tap", function(){
-
-        if(k.PIO5==k.HIGH){
-            // モーターをON/OFF
-               k.digitalWrite(k.PIO5, k.LOW);
-            } else {
-                // モーターをOFF/ON
-               k.digitalWrite(k.PIO5, k.HIGH);
-            }
-
+        $("#MOTORON").on("tap", function(){
+        	k.digitalWrite(k.PIO5, k.HIGH);
         });
-	});
+        $("#MOTOROFF").on("tap", function(){
+        	k.digitalWrite(k.PIO5, k.LOW);
+        });
+});
     
     k.disconnected(function(){
         $("#goran").html("切断。");        
@@ -122,17 +105,17 @@
         <a id="find" class="button-main button-block element">
             koshian 接続開始
         </a>
-        <a id="fast" class="button-main button-block element">
-            高速
+        <a id="LEDON" class="button-main button-block element">
+            LED ON
         </a>
-        <a id="slow" class="button-main button-block element">
-            低速
+        <a id="LEDOFF" class="button-main button-block element">
+            LED OFF
         </a>
-        <a id="stop" class="button-main button-block element">
-            停止
+        <a id="MOTORON" class="button-main button-block element">
+            motor ON
         </a>
-        <a id="motor" class="button-main button-block element">
-            モーター
+        <a id="MOTOROFF" class="button-main button-block element">
+            motor OFF
         </a>
         <a id="disconnect" class="button-main button-block element">
             koshian 接続解除
