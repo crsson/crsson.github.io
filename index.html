@@ -27,14 +27,21 @@
     // forked from habingo's "KoshianでLEDチカチカ" http://jsdo.it/habingo/1pT8
     // forked from monakaz's "まずはLチカ（LEDチカチカ）" http://jsdo.it/monakaz/nOMl
     // konashi.js LEDチカチカkoshianでトライ
-    // LEDチカチカ開始
-    var interval = 500;
+
+    // koshianと接続できたら
+    k.ready(function(){
+        // まずはI/Oの設定から
+        k.pinModeAll(253);
+    });
+
+	// timer
+	var interval = 100;
     var timer1;
+	var button = false;
     
-    function startBlinkLed(){
+    function timerCount(){
+		/*
         var toggle = false;
-        
-       timer1 = setInterval(function(){
         if(toggle){
             // LEDをON/OFF
                k.digitalWrite(k.PIO0, k.HIGH);
@@ -45,26 +52,27 @@
             
             // 次の状態をセット
             toggle = !toggle;
-          }, interval);
-      
-        $("#goran").html("接続中。koshian on the konashi");
-    }
-    
-    // koshianと接続できたら
-    k.ready(function(){
-        // まずはI/Oの設定から
-        k.pinModeAll(253);
+        */
+		timer1 = setInterval(function(){
+			if(k.digitalRead(k.PIO1) != 0){
+				button = true;
+	       		$("#goran").html("button on");			
+			}
+			else{
+				button = false;
+			}
+		}, interval);
+    };
         
-        // Lチカスタートさせるよ
-        //startBlinkLed();
-});
-    
     //ボタン処理
     $(function(){
         $("#find").on("tap", function(){
             k.find();
             console.log("koshian is ready");  
-        });
+
+		timerCount();
+        $("#goran").html("接続中。");
+	});
         $("#disconnect").on("tap", function(){
             //接続を切ります
             clearInterval(timer1);
@@ -79,11 +87,9 @@
         });
 
         $("#MOTORON").on("tap", function(){
-        	k.digitalWrite(k.PIO5, k.HIGH);
         	k.digitalWrite(k.PIO2, k.HIGH);
         });
         $("#MOTOROFF").on("tap", function(){
-        	k.digitalWrite(k.PIO5, k.LOW);
         	k.digitalWrite(k.PIO2, k.LOW);
         });
 });
