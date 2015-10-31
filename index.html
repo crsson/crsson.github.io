@@ -54,7 +54,7 @@
             toggle = !toggle;
         */
 		timer1 = setInterval(function(){
-			if(k.digitalRead(k.PIO1) == k.HIGH){
+			if(k.digitalRead(k.PIO1) != k.LOW){
 				button = true;
 	       		$("#buttonTxt").html("button on");			
 			}
@@ -129,7 +129,7 @@
         <a id="disconnect" class="button-main button-block element">
             koshian 接続解除
         </a>
-        <div id="version" class="element">version1.01</div>
+        <div id="version" class="element">version1.02</div>
         <div id="goran" class="element"></div>
         <div id="buttonTxt" class="element"></div>
     </div>
