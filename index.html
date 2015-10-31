@@ -54,13 +54,14 @@
             toggle = !toggle;
         */
 		timer1 = setInterval(function(){
-			if(k.digitalRead(k.PIO1) != 0){
+			if(k.digitalRead(k.PIO1) == k.HIGH){
 				button = true;
-	       		$("#goran").html("button on");			
+	       		$("#buttonTxt").html("button on");			
 			}
 			else{
 				button = false;
-			}
+	       		$("#buttonTxt").html("button off");			
+				}
 		}, interval);
     };
         
@@ -129,6 +130,7 @@
             koshian 接続解除
         </a>
         <div id="goran" class="element"></div>
+        <div id="buttonTxt" class="element"></div>
     </div>
 </body>
 </html>
