@@ -28,16 +28,18 @@
     // forked from monakaz's "まずはLチカ（LEDチカチカ）" http://jsdo.it/monakaz/nOMl
     // konashi.js LEDチカチカkoshianでトライ
 
-    // koshianと接続できたら
-    k.ready(function(){
-        // まずはI/Oの設定から
-        k.pinModeAll(253);
-    });
-
 	// timer
 	var interval = 100;
     var timer1;
 	var button = false;
+	var buttonZero;
+
+    // koshianと接続できたら
+    k.ready(function(){
+        // まずはI/Oの設定から
+        k.pinModeAll(253);
+		buttonZero = k.PI01;
+    });
     
     function timerCount(){
 		/*
@@ -54,14 +56,14 @@
             toggle = !toggle;
         */
 		timer1 = setInterval(function(){
-			if(k.digitalRead(k.PIO1) != k.LOW){
+			if(k.digitalRead(k.PIO1) == k.HIGH){
 				button = true;
-	       		$("#buttonTxt").html("button on");			
-			}
+	       		$("#buttonTxt").html(string(k.PI01));
+				}
 			else{
 				button = false;
-	       		$("#buttonTxt").html("button off");			
-				}
+	       		$("#buttonTxt").html(string(k.PI01));
+			}
 		}, interval);
     };
         
@@ -70,9 +72,9 @@
         $("#find").on("tap", function(){
             k.find();
             console.log("koshian is ready");  
+        	$("#goran").html("接続中。");
 
-		timerCount();
-        $("#goran").html("接続中。");
+			timerCount();
 	});
         $("#disconnect").on("tap", function(){
             //接続を切ります
@@ -81,10 +83,10 @@
         });
 
         $("#LEDON").on("tap", function(){
-        	k.digitalWrite(k.PIO0, k.HIGH);
+        	k.digitalWrite(k.PIO6, k.HIGH);
         });
         $("#LEDOFF").on("tap", function(){
-        	k.digitalWrite(k.PIO0, k.LOW);
+        	k.digitalWrite(k.PIO6, k.LOW);
         });
 
         $("#MOTORON").on("tap", function(){
@@ -129,7 +131,7 @@
         <a id="disconnect" class="button-main button-block element">
             koshian 接続解除
         </a>
-        <div id="version" class="element">version1.02</div>
+        <div id="version" class="element">version1.03</div>
         <div id="goran" class="element"></div>
         <div id="buttonTxt" class="element"></div>
     </div>
